@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header :: common-header" />
+
+<body>
+
+<div th:replace="common/navbar :: common-navbar" />
+
+<!-- Main Jumbotron
+================================================== -->
+<!-- Wrap the rest of the page in another container to center all the content. -->
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="jumbotron">
+                <h1 class="text-center" th:text="#{about.h1.text}"></h1>
+                <p class="lead" th:text="#{about.p.lead}"></p>
+            </div>
+        </div>
+    </div>
+
+</div><!-- ./container -->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<div th:replace="common/header :: before-body-scripts" />
+
+</body>
+</html>
