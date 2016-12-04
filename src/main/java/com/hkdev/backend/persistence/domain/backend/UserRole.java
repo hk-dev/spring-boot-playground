@@ -13,14 +13,14 @@ public class UserRole implements Serializable {
     }
 
     @Id
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @Id
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
-    private User role;
+    private Role role;
 
     public User getUser() {
         return user;
@@ -30,11 +30,11 @@ public class UserRole implements Serializable {
         this.user = user;
     }
 
-    public User getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(User role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
