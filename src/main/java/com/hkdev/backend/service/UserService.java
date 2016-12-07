@@ -8,6 +8,7 @@ import com.hkdev.backend.persistence.repositories.RoleRepository;
 import com.hkdev.backend.persistence.repositories.UserRepository;
 import com.hkdev.enums.Plans;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +27,15 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Transactional
     public User createUser(User user, Plans plans, Set<UserRole> userRoles) {
+
+        String password = passwordEncoder.encode(user.getPassword());
+        user.setPassword(password);
+
         Plan plan = new Plan(plans);
 
         if(!planRepository.exists(plans.getId())) {
