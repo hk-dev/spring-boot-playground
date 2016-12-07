@@ -1,5 +1,7 @@
 package com.hkdev.backend.persistence.domain.backend;
 
+import com.hkdev.enums.Roles;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -20,6 +22,12 @@ public class Role implements Serializable {
 
     public Role() {
     }
+
+    public Role(Roles roles) {
+        this.id = roles.getId();
+        this.name = roles.getRoleName();
+    }
+
 
     public int getId() {
         return id;

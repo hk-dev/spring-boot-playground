@@ -7,6 +7,9 @@ import com.hkdev.backend.persistence.domain.backend.UserRole;
 import com.hkdev.backend.persistence.repositories.PlanRepository;
 import com.hkdev.backend.persistence.repositories.RoleRepository;
 import com.hkdev.backend.persistence.repositories.UserRepository;
+import com.hkdev.enums.Plans;
+import com.hkdev.enums.Roles;
+import com.hkdev.utils.UserUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,9 +35,6 @@ public class RepositoriesIntegrationTest {
     @Autowired
     private UserRepository userRepository;
 
-    private static final int BASIC_PLAN_ID = 1;
-    private static final int BASIC_ROLE_ID = 1;
-
     @Before
     public void init() {
         assertNotNull(planRepository);
@@ -44,34 +44,32 @@ public class RepositoriesIntegrationTest {
 
     @Test
     public void testCreateNewPlan() throws Exception {
-        Plan basicPlan = createBasicPlan();
+        Plan basicPlan = createPlan(Plans.BASIC);
         planRepository.save(basicPlan);
-        Plan retrievedPlan = planRepository.findOne(BASIC_PLAN_ID);
+        Plan retrievedPlan = planRepository.findOne(Plans.BASIC.getId());
         assertNotNull(retrievedPlan);
     }
 
     @Test
     public void testCreateNewRole() throws Exception {
-        Role basicRole = createBasicRole();
+        Role basicRole = createRole(Roles.BASIC);
         roleRepository.save(basicRole);
-        Role retrievedRole = roleRepository.findOne(BASIC_ROLE_ID);
+        Role retrievedRole = roleRepository.findOne(Roles.BASIC.getId());
         assertNotNull(retrievedRole);
     }
 
     @Test
     public void testCreateNewUser() throws Exception {
-        Plan plan = createBasicPlan();
+        Plan plan = createPlan(Plans.BASIC);
         planRepository.save(plan);
 
-        User basicUser = createBasicUser();
+        User basicUser = UserUtils.createBasicUser();
         basicUser.setPlan(plan);
 
-        Role basicRole = createBasicRole();
+        Role basicRole = createRole(Roles.BASIC);
 
         Set<UserRole> userRoles = new HashSet<>();
-        UserRole userRole = new UserRole();
-        userRole.setUser(basicUser);
-        userRole.setRole(basicRole);
+        UserRole userRole = new UserRole(basicUser, basicRole);
         userRoles.add(userRole);
 
         basicUser.getUserRoles().addAll(userRoles);
@@ -93,32 +91,11 @@ public class RepositoriesIntegrationTest {
         });
     }
 
-    private Plan createBasicPlan() {
-        Plan plan = new Plan();
-        plan.setId(BASIC_PLAN_ID);
-        plan.setName("Basic");
-        return plan;
+    private Plan createPlan(Plans plans) {
+        return new Plan(plans);
     }
 
-    private Role createBasicRole() {
-        Role role = new Role();
-        role.setId(BASIC_ROLE_ID);
-        role.setName("Basic");
-        return role;
-    }
-
-    private User createBasicUser() {
-        User user = new User();
-        user.setUsername("basicUser");
-        user.setPassword("password");
-        user.setEmail("basicUser@mail.com");
-        user.setFirstName("John");
-        user.setLastName("Doe");
-        user.setPhoneNumber("123456789");
-        user.setCountry("GB");
-        user.setEnabled(true);
-        user.setDescription("A user");
-        user.setProfileImageUrl("http://test.images.com/basicuser123");
-        return user;
+    private Role createRole(Roles roles) {
+        return new Role(roles);
     }
 }

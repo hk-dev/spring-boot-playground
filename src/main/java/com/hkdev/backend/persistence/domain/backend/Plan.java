@@ -1,5 +1,7 @@
 package com.hkdev.backend.persistence.domain.backend;
 
+import com.hkdev.enums.Plans;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -15,6 +17,11 @@ public class Plan implements Serializable {
     private String name;
 
     public Plan() {
+    }
+
+    public Plan(Plans plans) {
+        this.id = plans.getId();
+        this.name = plans.getPlanName();
     }
 
     public int getId() {
