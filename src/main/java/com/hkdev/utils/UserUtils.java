@@ -7,11 +7,11 @@ public class UserUtils {
     private UserUtils() {
     }
 
-    public static User createBasicUser() {
+    public static User createBasicUser(String username, String email) {
         User user = new User();
-        user.setUsername("basicUser");
+        user.setUsername(username);
         user.setPassword("password");
-        user.setEmail("basicUser@mail.com");
+        user.setEmail(email);
         user.setFirstName("John");
         user.setLastName("Doe");
         user.setPhoneNumber("123456789");
