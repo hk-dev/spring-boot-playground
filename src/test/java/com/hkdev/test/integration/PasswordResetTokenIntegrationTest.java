@@ -28,12 +28,6 @@ import static org.junit.Assert.*;
 @SpringBootTest
 public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
 
-    @Value("${token.expiration.length.minutes}")
-    private int expirationTimeInMinutes;
-
-    @Autowired
-    private PasswordResetTokenRepository passwordResetTokenRepository;
-
     @Rule
     public TestName testName = new TestName();
 
@@ -126,11 +120,5 @@ public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
         List<String> tokensList = tokens.stream().map(PasswordResetToken::getToken).collect(Collectors.toList());
         List<String> actualTokenList = actualTokens.stream().map(PasswordResetToken::getToken).collect(Collectors.toList());
         assertEquals(tokensList, actualTokenList);
-    }
-
-    private PasswordResetToken createPasswordResetToken(String token, User user, LocalDateTime localDateTime) {
-        PasswordResetToken passwordResetToken = new PasswordResetToken(token, user, localDateTime, expirationTimeInMinutes);
-        passwordResetTokenRepository.save(passwordResetToken);
-        return passwordResetToken;
     }
 }

@@ -7,6 +7,8 @@ import com.hkdev.backend.persistence.repositories.PlanRepository;
 import com.hkdev.backend.persistence.repositories.RoleRepository;
 import com.hkdev.backend.persistence.repositories.UserRepository;
 import com.hkdev.enums.Plans;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,8 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+
     @Transactional
     public User createUser(User user, Plans plans, Set<UserRole> userRoles) {
 
@@ -47,5 +51,12 @@ public class UserService {
         user.getUserRoles().addAll(userRoles);
         user = userRepository.save(user);
         return user;
+    }
+
+    @Transactional
+    public void updateUserPassword(long userId, String password) {
+        password = passwordEncoder.encode(password);
+        userRepository.updateUserPassword(userId, password);
+        LOGGER.debug("Password updated successfully for user id {}", userId);
     }
 }

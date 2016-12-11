@@ -1,9 +1,7 @@
 package com.hkdev.test.integration;
 
-import com.hkdev.backend.persistence.domain.backend.Plan;
-import com.hkdev.backend.persistence.domain.backend.Role;
-import com.hkdev.backend.persistence.domain.backend.User;
-import com.hkdev.backend.persistence.domain.backend.UserRole;
+import com.hkdev.backend.persistence.domain.backend.*;
+import com.hkdev.backend.persistence.repositories.PasswordResetTokenRepository;
 import com.hkdev.backend.persistence.repositories.PlanRepository;
 import com.hkdev.backend.persistence.repositories.RoleRepository;
 import com.hkdev.backend.persistence.repositories.UserRepository;
@@ -12,7 +10,9 @@ import com.hkdev.enums.Roles;
 import com.hkdev.utils.UserUtils;
 import org.junit.rules.TestName;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,6 +26,12 @@ public abstract class AbstractIntegrationTest {
 
     @Autowired
     protected UserRepository userRepository;
+
+    @Autowired
+    protected PasswordResetTokenRepository passwordResetTokenRepository;
+
+    @Value("${token.expiration.length.minutes}")
+    protected int expirationTimeInMinutes;
 
     protected Plan createPlan(Plans plans) {
         return new Plan(plans);
@@ -56,5 +62,11 @@ public abstract class AbstractIntegrationTest {
 
     protected User createUser(TestName testName) {
         return createUser(testName.getMethodName(), testName.getMethodName() + "@mail.com");
+    }
+
+    protected PasswordResetToken createPasswordResetToken(String token, User user, LocalDateTime localDateTime) {
+        PasswordResetToken passwordResetToken = new PasswordResetToken(token, user, localDateTime, expirationTimeInMinutes);
+        passwordResetTokenRepository.save(passwordResetToken);
+        return passwordResetToken;
     }
 }
