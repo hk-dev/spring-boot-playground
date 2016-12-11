@@ -2,6 +2,7 @@ package com.hkdev.config;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -9,5 +10,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(basePackages = "com.hkdev.backend.persistence.repositories")
 @EntityScan(basePackages = "com.hkdev.backend.persistence.domain.backend")
 @EnableTransactionManagement
+@PropertySource("file:///${user.home}/.hkdev/application-common.properties")
 public class ApplicationConfig {
 }

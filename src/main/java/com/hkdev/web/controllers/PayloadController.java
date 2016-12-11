@@ -1,9 +1,9 @@
 package com.hkdev.web.controllers;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class PayloadController {
 
     public static final String PAYLOAD_VIEW_NAME = "payload/payload";

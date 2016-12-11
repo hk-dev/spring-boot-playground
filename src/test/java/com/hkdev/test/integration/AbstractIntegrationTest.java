@@ -1,0 +1,60 @@
+package com.hkdev.test.integration;
+
+import com.hkdev.backend.persistence.domain.backend.Plan;
+import com.hkdev.backend.persistence.domain.backend.Role;
+import com.hkdev.backend.persistence.domain.backend.User;
+import com.hkdev.backend.persistence.domain.backend.UserRole;
+import com.hkdev.backend.persistence.repositories.PlanRepository;
+import com.hkdev.backend.persistence.repositories.RoleRepository;
+import com.hkdev.backend.persistence.repositories.UserRepository;
+import com.hkdev.enums.Plans;
+import com.hkdev.enums.Roles;
+import com.hkdev.utils.UserUtils;
+import org.junit.rules.TestName;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public abstract class AbstractIntegrationTest {
+
+    @Autowired
+    protected PlanRepository planRepository;
+
+    @Autowired
+    protected RoleRepository roleRepository;
+
+    @Autowired
+    protected UserRepository userRepository;
+
+    protected Plan createPlan(Plans plans) {
+        return new Plan(plans);
+    }
+
+    protected Role createRole(Roles roles) {
+        return new Role(roles);
+    }
+
+    protected User createUser(String username, String email) {
+        Plan basicPlan = createPlan(Plans.BASIC);
+        planRepository.save(basicPlan);
+
+        User basicUser = UserUtils.createBasicUser(username, email);
+        basicUser.setPlan(basicPlan);
+
+        Role basicRole = createRole(Roles.BASIC);
+        roleRepository.save(basicRole);
+
+        Set<UserRole> userRoles = new HashSet<>();
+        UserRole userRole = new UserRole(basicUser, basicRole);
+        userRoles.add(userRole);
+
+        basicUser.getUserRoles().addAll(userRoles);
+        basicUser = userRepository.save(basicUser);
+        return basicUser;
+    }
+
+    protected User createUser(TestName testName) {
+        return createUser(testName.getMethodName(), testName.getMethodName() + "@mail.com");
+    }
+}

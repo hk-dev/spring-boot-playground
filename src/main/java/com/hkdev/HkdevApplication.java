@@ -10,6 +10,7 @@ import com.hkdev.utils.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,18 +26,25 @@ public class HkdevApplication implements CommandLineRunner {
 	@Autowired
 	private UserService userService;
 
+	@Value("${webmaster.username}")
+	private String webmasterUsername;
+
+	@Value("${webmaster.password}")
+	private String webmasterPassword;
+
+	@Value("${webmaster.email}")
+	private String webmasterEmail;
+
 	public static void main(String[] args) {
 		SpringApplication.run(HkdevApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) {
-		String username = "proUser";
-		String email = "proUser@mail.com";
-
-		User user = UserUtils.createBasicUser(username, email);
+		User user = UserUtils.createBasicUser(webmasterUsername, webmasterEmail);
+		user.setPassword(webmasterPassword);
 		Set<UserRole> userRoles = new HashSet<>();
-		userRoles.add(new UserRole(user, new Role(Roles.BASIC)));
+		userRoles.add(new UserRole(user, new Role(Roles.ADMIN)));
 		LOGGER.debug("Creating user with username {}", user.getUsername());
 		userService.createUser(user, Plans.PRO, userRoles);
 		LOGGER.info("User {} created", user.getUsername());
