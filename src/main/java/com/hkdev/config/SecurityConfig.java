@@ -1,6 +1,7 @@
 package com.hkdev.config;
 
 import com.hkdev.backend.service.UserSecurityService;
+import com.hkdev.web.controllers.ForgotMyPasswordController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/about/**",
             "/contact/**",
             "/error/**/*",
-            "/console/**"
+            "/console/**",
+            "/forgotmypassword/**"
     };
 
     @Override
